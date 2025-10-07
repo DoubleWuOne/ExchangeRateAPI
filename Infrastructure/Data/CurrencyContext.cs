@@ -10,6 +10,7 @@ namespace Infrastructure.Data
 
         }
         public DbSet<ExchangeEntity> ExchangeEntities { get; set; }
+        public DbSet<ApiKey> ApiKeys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
