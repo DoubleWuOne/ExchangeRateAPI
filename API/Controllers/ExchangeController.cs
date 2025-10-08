@@ -23,11 +23,13 @@ namespace API.Controllers
             var currency = await _exchangeService.GetTestData();
             return Ok(currency);
         }
-
+        //http://localhost:5218/api/exchange?currencyCodes.Key=PLN&currencyCodes.Value=EUR&startDate=2009-02-01&endDate=2009-05-31
         [HttpGet]
         public async Task<IActionResult> GetData([FromQuery] KeyValuePair<string, string> currencyCodes, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
             var currency = await _exchangeService.GetData(currencyCodes, startDate, endDate);
+            if (currency == null)
+                return NotFound();
             return Ok(currency);
         }
 
