@@ -38,13 +38,49 @@ ExchangeRateAPI is a sample ASP.NET Core Web API project designed to demonstrate
    ```powershell
    dotnet build
    ```
-5. Run the API project:
+5. (Optional) Start SQL Server using Docker:
+   ```powershell
+   docker compose up -d
+   ```
+   This will start a SQL Server instance on port 1433 with default credentials as defined in `docker-compose.yaml`.
+6. Update the database (apply migrations):
+   ```powershell
+   dotnet ef database update --project Infrastructure/Infrastructure.csproj
+   ```
+   This will create the required tables in the database.
+7. Run the API project:
    ```powershell
    dotnet run --project API/API.csproj
    ```
 
+### Generating a Token
+To access protected endpoints, you need an API token. The original goal was to require a token for all endpoints, but only a test endpoint is protected in this version.
+
+Generate a token by sending a POST request to:
+```
+POST /api/exchange/token
+```
+You can use tools like Postman or `curl`:
+```powershell
+curl -X POST http://localhost:5218/api/exchange/token
+```
+The response will be your token.
+
+### Using the Token (Authentication)
+To access the test authenticated endpoint, include the token in the `Authorization` header:
+```
+GET /api/exchange/auth
+Authorization: Bearer <your_token>
+```
+Note: Only the `/api/exchange/auth` endpoint requires authentication in this version. Other endpoints do not check the token.
+
+### Example Endpoints
+- `/api/exchange/test` - Returns test data (no authentication required)
+- `/api/exchange/auth` - Returns a message if authenticated (requires token)
+- `/api/exchange` - Main exchange rate endpoint (no authentication required)
+
 ## Usage
-This API provides endpoints for retrieving currency exchange rates. See `API/Controllers/ExchangeController.cs` for example endpoints.
+This API provides endpoints for retrieving currency exchange rates. See `API/Controllers/ExchangeController.cs` for example endpoints and usage details.
 
 ## Disclaimer
 This project is for educational purposes only and is not maintained.
